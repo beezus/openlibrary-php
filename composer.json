@@ -2,6 +2,8 @@
 
   "name": "beezus/openlibrary-php",
 
+  "version": "1.0",
+  
   "description": "A PHP wrapper for the Open Library API",
 
   "keywords": ["openlibrary", "api", "php"],
