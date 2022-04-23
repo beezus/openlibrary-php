@@ -1,6 +1,6 @@
 # **Open Library API Client**
 
-Allows some interaction with the the [Open Library API](http://openlibrary.org/developers/api) using an object-based interface.
+Allows some interaction with the [Open Library API](http://openlibrary.org/developers/api) using an object-based interface.
 
 ## Installation
 
