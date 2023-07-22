@@ -16,9 +16,9 @@ class RequestHandler
      */
     public function __construct()
     {
-        $this->base_url = 'http://openlibrary.org';
+        $this->base_url = 'https://openlibrary.org';
 
-        $this->version = '0.0.1';
+        $this->version = '0.0.2';
 
         $this->client = new \Guzzle\Http\Client(null, array(
             'redirect.disable' => true

@@ -109,7 +109,7 @@ class Client
     }
 
     /**
-     * Find an author in Open Library by his or her key
+     * Find an author in Open Library by their key
      *
      * @param string $key the Open Library author key
      * @return array the response array
