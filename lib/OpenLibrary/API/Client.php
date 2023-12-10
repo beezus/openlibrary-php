@@ -7,7 +7,6 @@ namespace OpenLibrary\API;
  */
 class Client
 {
-
     private $requestHandler;
 
     /**
@@ -32,7 +31,7 @@ class Client
      * Get a book by its Open Library ID
      *
      * @param string $olid the OLID
-     * @return array the response array
+     * @return object the response
      */
     public function getBookByOLID($olid)
     {
@@ -45,7 +44,7 @@ class Client
      * Find editions by International Standard Book Number
      *
      * @param string $isbn the ISBN
-     * @return array the response array
+     * @return object the response array
      */
     public function queryEditionsByISBN($isbn)
     {
@@ -53,7 +52,6 @@ class Client
             case 10:
                 $isbn_type = 'isbn_10';
                 break;
-            
             case 13:
                 $isbn_type = 'isbn_13';
                 break;
@@ -64,11 +62,11 @@ class Client
 
         return $this->getRequest(
             '/query.json',
-            array(
+            [
                 'type' => '/type/edition',
                 $isbn_type => $isbn,
                 '*' => ''
-            )
+            ]
         );
     }
 
@@ -76,17 +74,17 @@ class Client
      * Find editions by Library of Congress Control Number
      *
      * @param string $lccn the LCNN
-     * @return array the response array
+     * @return object the response array
      */
     public function queryEditionsByLCCN($lccn)
     {
         return $this->getRequest(
             '/query.json',
-            array(
+            [
                 'type' => '/type/edition',
                 'lccn' => $lccn,
                 '*' => ''
-            )
+            ]
         );
     }
 
@@ -94,17 +92,17 @@ class Client
      * Find editions by Online Computer Library Center number
      *
      * @param string $oclc the OCLC number
-     * @return array the response array
+     * @return object the response array
      */
     public function queryEditionsByOCLC($oclc)
     {
         return $this->getRequest(
             '/query.json',
-            array(
+            [
                 'type' => '/type/edition',
                 'oclc_numbers' => $oclc,
                 '*' => ''
-            )
+            ]
         );
     }
 
@@ -112,7 +110,7 @@ class Client
      * Find an author in Open Library by their key
      *
      * @param string $key the Open Library author key
-     * @return array the response array
+     * @return object the response array
      */
     public function getAuthorByKey($key)
     {
@@ -127,17 +125,17 @@ class Client
      * @param string $work the Open Library work key
      * @param int $limit number of results to limit by
      * @param int $offset number of results to offset by
-     * @return array the response array
+     * @return object the response array
      */
-    public function getEditionsOfWork($work, $limt=20, $offset=0)
+    public function getEditionsOfWork($work, $limit = 20, $offset = 0)
     {
         return $this->getRequest(
             sprintf('/works/%s/editions.json', $work),
-            array(
+            [
                 'limit' => (int)$limit,
                 'offset' => (int)$offset,
                 '*' => ''
-            )
+            ]
         );
     }
 
@@ -147,22 +145,22 @@ class Client
      * @param string $path the path to call on
      * @param array  $options the options to call with
      *
-     * @return array the response object (parsed)
+     * @return object the response object (parsed)
      */
-    private function getRequest($path, $options=array())
+    private function getRequest($path, $options = array())
     {
         $response = $this->makeRequest('GET', $path, $options);
 
         return $this->parseResponse($response);
     }
- 
+
     /**
      * Parse a response and return an appropriate result
      *
      * @param \stdClass $response the response from the server
      *
      * @throws RequestException
-     * @return array the response data
+     * @return object the response data
      */
     private function parseResponse($response)
     {
@@ -188,5 +186,4 @@ class Client
     {
         return $this->requestHandler()->request($method, $path, $options);
     }
-
 }
