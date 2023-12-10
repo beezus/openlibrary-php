@@ -7,9 +7,9 @@ namespace OpenLibrary\API;
  */
 class RequestHandler
 {
-
-    private $base_url;
-    private $version;
+    private string $base_url;
+    private string $version;
+    private Client $client;
 
     /**
      * Instantiate a new RequestHandler
@@ -18,15 +18,20 @@ class RequestHandler
     {
         $this->base_url = 'https://openlibrary.org';
 
-        $this->version = '0.0.2';
+        $this->version = '0.0.7';
 
-        $this->client = new \Guzzle\Http\Client(null, array(
-            'redirect.disable' => true
-        ));
+        $this->client = new \GuzzleHttp\Client([
+            'base_uri' => $this->base_url,
+            'allow_redirects' => false,
+            'headers' => [
+                'User-Agent' => 'openlibrary.php/' . $this->version
+            ]
+        ]);
     }
 
     /**
      * Set the base url for this request handler
+     * // TODO now does nothing relevant
      *
      * @param string $url The base url
      */
@@ -49,27 +54,19 @@ class RequestHandler
         // Ensure there are options
         $options = $options ?: array();
 
-        $url = $this->base_url . $path;
-
-        $request = $this->client->get($url, null);
-        $request->getQuery()->merge($options);
-
-        $request->setHeader('User-Agent', 'openlibrary.php/'.$this->version);
- 
         // Collapse Guzzle's errors to deal with at the Client level
         try {
-            $response = $request->send();
-        } catch (\Guzzle\Http\Exception\BadResponseException $e) {
-            $response = $request->getResponse();
+            $response = $this->client->get($path, $options);
+        } catch (\GuzzleHttp\Exception\BadResponseException $e) {
+            // TODO fail
         }
 
         // Construct the object that the Client expects to see, and return it
-        $obj = new \stdClass;
+        $obj = new \stdClass();
         $obj->status = $response->getStatusCode();
         $obj->body = $response->getBody();
-        $obj->headers = $response->getHeaders()->toArray();
- 
+        $obj->headers = $response->getHeaders();
+
         return $obj;
     }
-
 }

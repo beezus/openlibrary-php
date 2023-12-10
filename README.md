@@ -1,14 +1,18 @@
 # **Open Library API Client**
 
+> [!NOTE]
+> This was forked from [beezus/openlibrary-php](https://github.com/beezus/openlibrary-php) in order to add updated support for current [guzzlehttp/guzzle](https://github.com/guzzle/guzzle/):^7.0 and PHP >=8.
+
 Allows some interaction with the [Open Library API](http://openlibrary.org/developers/api) using an object-based interface.
 
 ## Installation
 
-This package can be installed via Composer:
+~~This package can be installed via Composer:~~
 
 ```bash
 composer require beezus/openlibrary-php
 ```
+
 ## Basic usage
 
 ```php

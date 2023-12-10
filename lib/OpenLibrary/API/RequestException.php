@@ -4,7 +4,7 @@ namespace OpenLibrary\API;
 
 class RequestException extends \Exception
 {
-
+    private int $statusCode;
     /**
      * @param \stdClass $response
      */
@@ -18,7 +18,7 @@ class RequestException extends \Exception
             $errstr = $error->meta->msg;
 
             if (isset($error->response->errors)) {
-                $errstr .= ' ('.$error->response->errors[0].')';
+                $errstr .= ' (' . $error->response->errors[0] . ')';
             }
         } elseif (isset($error->response->errors)) {
             $errstr = $error->response->errors[0];
@@ -34,5 +34,4 @@ class RequestException extends \Exception
     {
         return __CLASS__ . ": [$this->statusCode]: $this->message\n";
     }
-
 }
