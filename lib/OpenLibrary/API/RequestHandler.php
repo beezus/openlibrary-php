@@ -2,6 +2,8 @@
 
 namespace OpenLibrary\API;
 
+use GuzzleHttp\Client as GuzzleClient;
+
 /**
  * A request handler for Open Library API requests
  */
@@ -9,7 +11,7 @@ class RequestHandler
 {
     private string $base_url;
     private string $version;
-    private Client $client;
+    private GuzzleClient $client;
 
     /**
      * Instantiate a new RequestHandler
@@ -20,7 +22,7 @@ class RequestHandler
 
         $this->version = '0.0.7';
 
-        $this->client = new \GuzzleHttp\Client([
+        $this->client = new GuzzleClient([
             'base_uri' => $this->base_url,
             'allow_redirects' => false,
             'headers' => [

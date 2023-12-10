@@ -1,13 +1,13 @@
 {
-  "name": "beezus/openlibrary-php",
-  "version": "1.0.1",
+  "name": "angorb/openlibrary-php",
+  "version": "1.0.2",
   "description": "A PHP wrapper for the Open Library API",
   "keywords": [
     "openlibrary",
     "api",
     "php"
   ],
-  "homepage": "https://github.com/beezus/openlibrary-php",
+  "homepage": "https://github.com/angorb/openlibrary-php",
   "type": "library",
   "require": {
     "guzzlehttp/guzzle": "^7.0"
