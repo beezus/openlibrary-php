@@ -9,6 +9,7 @@ This package can be installed via Composer:
 ```bash
 composer require beezus/openlibrary-php
 ```
+
 ## Basic usage
 
 ```php
@@ -21,5 +22,5 @@ use OpenLibrary\API\Client as OpenLibraryAPI;
 
 $api = new OpenLibraryAPI();
 $book = $api->getBookByOLID( 'OL24222743M' );
-echo $book->title;
+echo $book['title'];
 ```

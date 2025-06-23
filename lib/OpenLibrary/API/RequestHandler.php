@@ -2,14 +2,17 @@
 
 namespace OpenLibrary\API;
 
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
+
 /**
  * A request handler for Open Library API requests
  */
 class RequestHandler
 {
-
-    private $base_url;
-    private $version;
+    private string $base_url;
+    private string $version;
+    private Client $client;
 
     /**
      * Instantiate a new RequestHandler
@@ -17,12 +20,10 @@ class RequestHandler
     public function __construct()
     {
         $this->base_url = 'https://openlibrary.org';
-
-        $this->version = '0.0.2';
-
-        $this->client = new \Guzzle\Http\Client(null, array(
-            'redirect.disable' => true
-        ));
+        $this->version = '1.0.0';
+        $this->client = new Client([
+            'allow_redirects' => false
+        ]);
     }
 
     /**
@@ -30,7 +31,7 @@ class RequestHandler
      *
      * @param string $url The base url
      */
-    public function setBaseUrl($url)
+    public function setBaseUrl(string $url): void
     {
         $this->base_url = $url;
     }
@@ -44,32 +45,41 @@ class RequestHandler
      *
      * @return \stdClass response object
      */
-    public function request($method, $path, $options)
+    public function request(string $method, string $path, array $options): \stdClass
     {
         // Ensure there are options
-        $options = $options ?: array();
-
+        $options = $options ?: [];
         $url = $this->base_url . $path;
+        
+        $requestOptions = [
+            'headers' => [
+                'User-Agent' => 'openlibrary.php/'.$this->version
+            ],
+            'query' => $options
+        ];
 
-        $request = $this->client->get($url, null);
-        $request->getQuery()->merge($options);
-
-        $request->setHeader('User-Agent', 'openlibrary.php/'.$this->version);
- 
         // Collapse Guzzle's errors to deal with at the Client level
         try {
-            $response = $request->send();
-        } catch (\Guzzle\Http\Exception\BadResponseException $e) {
-            $response = $request->getResponse();
+            $response = $this->client->request($method, $url, $requestOptions);
+        } catch (GuzzleException $e) {
+            if (method_exists($e, 'getResponse') && $e->getResponse()) {
+                $response = $e->getResponse();
+            } else {
+                // Create a response-like object for other exceptions
+                $obj = new \stdClass;
+                $obj->status = 500;
+                $obj->body = $e->getMessage();
+                $obj->headers = [];
+                return $obj;
+            }
         }
 
         // Construct the object that the Client expects to see, and return it
         $obj = new \stdClass;
         $obj->status = $response->getStatusCode();
-        $obj->body = $response->getBody();
-        $obj->headers = $response->getHeaders()->toArray();
- 
+        $obj->body = (string)$response->getBody();
+        $obj->headers = $response->getHeaders();
+        
         return $obj;
     }
-
 }

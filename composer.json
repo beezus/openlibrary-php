@@ -2,7 +2,7 @@
 
   "name": "beezus/openlibrary-php",
 
-  "version": "1.0.1",
+  "version": "2.0.0",
   
   "description": "A PHP wrapper for the Open Library API",
 
@@ -13,7 +13,8 @@
   "type": "library",
 
   "require": {
-    "guzzle/guzzle": ">=3.1.0,<4"
+    "php": ">=8.0",
+    "guzzlehttp/guzzle": "^7.0"
   },
 
   "autoload": {
